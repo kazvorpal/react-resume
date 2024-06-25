@@ -1,0 +1,2 @@
+This is my resume in a single file. 
+I was making a single-page Client-Side-Rendered React resume as a demo, but never finished it...this is a sort of branch I've thrown together to demonstrate my hand-coded CSS for a project. It contains transitions, flex boxes, CSS variables (Which are native, not in LESS or something), et cetera. Also replaced the React with hand-coded JavaScript, using ECMAScript 2023
