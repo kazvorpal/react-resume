@@ -56,98 +56,111 @@
             letter-spacing: 0;
         }
         .parallax-container {
+            /* I'm nesting selectors, because modern browsers support this CSS3 module. 
+               If we were concerned about older browsers like IE, we would have a fallback. */
             height: 100vh;
             overflow-x: hidden;
             overflow-y: auto;
             perspective: 1px;
             position: relative;
+
+            :is(.cube, .job-tile):hover {
+                transform: scale(1.1);
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
+
+            .background {
+                transform: translateZ(-0.1px) scale(1);
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                align-content: flex-start;
+                position: absolute;
+                padding: 20px;
+                min-height: 210vh;
+                z-index: -1;
+                .job-tile {
+                    flex-basis: calc(100% - 20px);
+                    margin: 10px;
+                    padding: 15px;
+                    background-color: var(--background-light);
+                    border-radius: 5px;
+                    box-shadow: var(--box-shadow-standard);
+                    z-index: 1;
+
+                    @media (min-width: 768px) {
+                        flex-basis: calc(50% - 20px);
+                    }
+                    @media (min-width: 1024px) {
+                        flex-basis: calc(33.33% - 20px);
+                    }
+                    h3 {
+                        margin-top: 0;
+                    }
+                }
+            }
+
+            .cube {
+                position: absolute;
+                background-color: rgba(255, 255, 255, 0.7);
+                border-radius: 10px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: bold;
+                cursor: pointer;
+                transition: transform 0.3s, background-color 0.3s;
+                z-index: 1;
+                font-size: 1.5vw; 
+            }
+
+            .parallax-layer {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                &:nth-child(2) { 
+                    transform: translateZ(-0.5px) scale(1.5); 
+                    pointer-events: none;
+                    .cube:nth-of-type(1) { width: 10vw; height: 10vw; background-color: rgba(255, 127, 80, 0.5); top: 20%; left: 10%; transform: translateZ(-0.5px) scale(1.5);pointer-events: auto;}
+                    .cube:nth-of-type(2) { width: 8vw; height: 8vw; background-color: rgba(65, 105, 225, 0.5); top: 40%; right: 15%; transform: translateZ(-1px) scale(2);pointer-events: auto;}
+                }
+                &:nth-child(3) { 
+                    transform: translateZ(-1px) scale(2); 
+                    pointer-events: none;
+                    .cube:nth-of-type(1) { width: 12vw; height: 12vw; background-color: rgba(50, 205, 50, 0.5); bottom: 25%; left: 20%; transform: translateZ(-1.5px) scale(2.5);pointer-events: auto;}
+                    .cube:nth-of-type(2) { width: 7vw; height: 7vw; background-color: rgba(255, 105, 180, 0.5); top: 60%; right: 25%; transform: translateZ(-0.8px) scale(1.8);pointer-events: auto;}
+                }
+                &:nth-child(4) { 
+                    transform: translateZ(.1px) scale(1.5); 
+                    pointer-events: none; 
+                    .cube:nth-of-type(1) { width: 9vw; height: 9vw; background-color: rgba(255, 215, 0, 0.5); top: 80%; left: 30%; transform: translateZ(-1.2px) scale(2.2);pointer-events: auto;}
+                    .cube:nth-of-type(2) { width: 11vw; height: 11vw; background-color: rgba(138, 43, 226, 0.5); top: 100%; right: 20%; transform: translateZ(-0.7px) scale(1.7);pointer-events: auto;}
+                }
+                &:nth-child(5) { 
+                    transform: translateZ(-8px) scale(3); 
+                    pointer-events: none; 
+                    .cube:nth-of-type(1) { width: 9.5vw; height: 9.5vw; background-color: rgba(0, 206, 209, 0.5); top: 120%; left: 15%; transform: translateZ(-1.3px) scale(2.3);pointer-events: auto;}
+                    .cube:nth-of-type(2) { width: 7.5vw; height: 7.5vw; background-color: rgba(255, 69, 0, 0.5); top: 140%; right: 30%; transform: translateZ(-0.9px) scale(1.9);pointer-events: auto;}
+                }
+            }
         }
 
-        .parallax-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-        }
 
 
-        .background {
-            transform: translateZ(-0.1px) scale(1);
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-content: flex-start;
-            position: absolute;
-            padding: 20px;
-            min-height: 210vh;
-            z-index: -1;
-        }
 
-        .job-tile {
-            flex-basis: calc(100% - 20px);
-            margin: 10px;
-            padding: 15px;
-            background-color: var(--background-light);
-            border-radius: 5px;
-            box-shadow: var(--box-shadow-standard);
-            z-index: 1;
-        }
 
-        .job-tile h3 {
-            margin-top: 0;
-        }
 
-        .cube {
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.7);
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
-            z-index: 1;
-            font-size: 1.5vw; 
-        }
-
-        :is(.cube, .job-tile):hover {
-            transform: scale(1.1);
-        }
-
-        .cube:hover {
-            transform: scale(1.1);
-        }
         /* 
             Next are the transforms that create some complicated parallax. 
             Simple parallax would be just making the background fixed, The foreground, and maybe some transparent images. 
             And all of this would look better on a real site with real purpose...I'm just sticking it in here as a proof of concept.
         */
-        #html { width: 10vw; height: 10vw; background-color: rgba(255, 127, 80, 0.5); top: 20%; left: 10%; transform: translateZ(-0.5px) scale(1.5);pointer-events: auto;}
-        #vsc { width: 8vw; height: 8vw; background-color: rgba(65, 105, 225, 0.5); top: 40%; right: 15%; transform: translateZ(-1px) scale(2);pointer-events: auto;}
-        #css { width: 12vw; height: 12vw; background-color: rgba(50, 205, 50, 0.5); bottom: 25%; left: 20%; transform: translateZ(-1.5px) scale(2.5);pointer-events: auto;}
-        #parallax { width: 7vw; height: 7vw; background-color: rgba(255, 105, 180, 0.5); top: 60%; right: 25%; transform: translateZ(-0.8px) scale(1.8);pointer-events: auto;}
-        #javascript { width: 9vw; height: 9vw; background-color: rgba(255, 215, 0, 0.5); top: 80%; left: 30%; transform: translateZ(-1.2px) scale(2.2);pointer-events: auto;}
-        #sql { width: 11vw; height: 11vw; background-color: rgba(138, 43, 226, 0.5); top: 100%; right: 20%; transform: translateZ(-0.7px) scale(1.7);pointer-events: auto;}
-        #transitions { width: 9.5vw; height: 9.5vw; background-color: rgba(0, 206, 209, 0.5); top: 120%; left: 15%; transform: translateZ(-1.3px) scale(2.3);pointer-events: auto;}
-        #iis { width: 7.5vw; height: 7.5vw; background-color: rgba(255, 69, 0, 0.5); top: 140%; right: 30%; transform: translateZ(-0.9px) scale(1.9);pointer-events: auto;}
 
-        .parallax-layer:nth-child(2) { transform: translateZ(-0.5px) scale(1.5); pointer-events: none;}
-        .parallax-layer:nth-child(3) { transform: translateZ(-1px) scale(2); pointer-events: none;}
-        .parallax-layer:nth-child(4) { transform: translateZ(.1px) scale(1.5); pointer-events: none; }
-        .parallax-layer:nth-child(5) { transform: translateZ(-8px) scale(3); pointer-events: none; }
 
-        @media (min-width: 768px) {
-            .job-tile {
-                flex-basis: calc(50% - 20px);
-            }
-        }
-        @media (min-width: 1024px) {
-            .job-tile {
-                flex-basis: calc(33.33% - 20px);
-            }
-        }
 
 </style>
 </head>
