@@ -56,7 +56,8 @@
             letter-spacing: 0;
         }
         .parallax-container {
-            /* I'm nesting selectors, because modern browsers support this CSS3 module. 
+            /* I'm nesting selectors, because modern browsers support doing so from the latest CSS3 module. 
+               This is easier to read and mantain.
                If we were concerned about older browsers like IE, we would have a fallback. */
             height: 100vh;
             overflow-x: hidden;
@@ -116,6 +117,11 @@
                 font-size: 1.5vw; 
             }
 
+            /* 
+                Next are the transforms that create some complicated parallax. 
+                Simple parallax would be just making the background fixed, The foreground, and maybe some transparent images. 
+                And all of this would look better on a real site with real purpose...I'm just sticking it in here as a proof of concept.
+            */
             .parallax-layer {
                 position: fixed;
                 top: 0;
@@ -149,20 +155,7 @@
             }
         }
 
-
-
-
-
-
-        /* 
-            Next are the transforms that create some complicated parallax. 
-            Simple parallax would be just making the background fixed, The foreground, and maybe some transparent images. 
-            And all of this would look better on a real site with real purpose...I'm just sticking it in here as a proof of concept.
-        */
-
-
-
-</style>
+    </style>
 </head>
 <body>
     <div id="header">The Resume of Kaz</div>
