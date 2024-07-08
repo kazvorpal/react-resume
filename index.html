@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/redux@4.1.0/umd/redux.min.js"></script>
-    <script src="https://unpkg.com/react-redux@7.2.4/umd/react-redux.min.js"></script>
+    <script src="https://unpkg.com/redux@4.1.0/dist/redux.min.js"></script>
+    <script src="https://unpkg.com/react-redux@7.2.4/dist/react-redux.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <title>The Parallax Demo of Kaz</title>
+    <title>The React Demo of Kaz</title>
     <style>
         /* 
             I just used a JavaScript-based resume I was working on, as a basis for this demo
@@ -31,6 +31,20 @@
             --background-light: rgba(255, 255, 255, 0.9);
             --box-shadow-standard: 0 0 10px rgba(0, 0, 0, 0.1);
         } 
+        .filter {
+            position: fixed;
+            top: -8px;
+            margin: 20px auto;
+            display: block;
+            padding: 8px 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 30pt;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
 
         #header {
             position: fixed;
@@ -108,41 +122,12 @@
                 }
             }
 
-            /* 
-                Next are the transforms that create some complicated parallax. 
-                Simple parallax would be just making the background fixed, The foreground, and maybe some transparent images. 
-                And all of this would look better on a real site with real purpose...I'm just sticking it in here as a proof of concept.
-            */
             .parallax-layer {
                 position: fixed;
                 top: 0;
                 left: 0;
                 right: 0;
                 bottom: 0;
-                &:nth-child(2) { 
-                    transform: translateZ(-0.5px) scale(1.5); 
-                    pointer-events: none;
-                    .cube:nth-of-type(1) { width: 10vw; height: 10vw; background-color: rgba(255, 127, 80, 0.5); top: 20%; left: 10%; transform: translateZ(-0.5px) scale(1.5);pointer-events: auto;}
-                    .cube:nth-of-type(2) { width: 8vw; height: 8vw; background-color: rgba(65, 105, 225, 0.5); top: 40%; right: 15%; transform: translateZ(-1px) scale(2);pointer-events: auto;}
-                }
-                &:nth-child(3) { 
-                    transform: translateZ(-1px) scale(2); 
-                    pointer-events: none;
-                    .cube:nth-of-type(1) { width: 12vw; height: 12vw; background-color: rgba(50, 205, 50, 0.5); bottom: 25%; left: 20%; transform: translateZ(-1.5px) scale(2.5);pointer-events: auto;}
-                    .cube:nth-of-type(2) { width: 7vw; height: 7vw; background-color: rgba(255, 105, 180, 0.5); top: 60%; right: 25%; transform: translateZ(-0.8px) scale(1.8);pointer-events: auto;}
-                }
-                &:nth-child(4) { 
-                    transform: translateZ(.1px) scale(1.5); 
-                    pointer-events: none; 
-                    .cube:nth-of-type(1) { width: 9vw; height: 9vw; background-color: rgba(255, 215, 0, 0.5); top: 80%; left: 30%; transform: translateZ(-1.2px) scale(2.2);pointer-events: auto;}
-                    .cube:nth-of-type(2) { width: 11vw; height: 11vw; background-color: rgba(138, 43, 226, 0.5); top: 100%; right: 20%; transform: translateZ(-0.7px) scale(1.7);pointer-events: auto;}
-                }
-                &:nth-child(5) { 
-                    transform: translateZ(-8px) scale(3); 
-                    pointer-events: none; 
-                    .cube:nth-of-type(1) { width: 9.5vw; height: 9.5vw; background-color: rgba(0, 206, 209, 0.5); top: 120%; left: 15%; transform: translateZ(-1.3px) scale(2.3);pointer-events: auto;}
-                    .cube:nth-of-type(2) { width: 7.5vw; height: 7.5vw; background-color: rgba(255, 69, 0, 0.5); top: 140%; right: 30%; transform: translateZ(-0.9px) scale(1.9);pointer-events: auto;}
-                }
             }
         }
 
@@ -153,22 +138,6 @@
     <div class="parallax-container">
         <div class="parallax-layer background" id="experience">
         </div>
-        <!-- <div class="parallax-layer">
-            <div id="html" class="cube">HTML5</div>
-            <div id="vsc" class="cube">Visual Studio</div>
-        </div>
-        <div class="parallax-layer">
-            <div id="css" class="cube">CSS3</div>
-            <div id="parallax" class="cube">Parallax.js</div>
-        </div>
-        <div class="parallax-layer">
-            <div id="javascript" class="cube">JavaScript</div>
-            <div id="sql" class="cube">SQL</div>
-        </div>
-        <div class="parallax-layer">
-            <div id="transitions" class="cube">Transitions</div>
-            <div id="iis" class="cube">IIS</div>
-        </div> -->
     </div>
     <div class="texture" id="tx"></div>
     <script>
@@ -326,26 +295,35 @@
 
     </script>
     <script type="text/babel">
+        const container = document.getElementById('experience');
+        const root = ReactDOM.createRoot(container);
+
         // This page doesn't need Redux. 
         // Its state situation is not complex enough to justify this additional code and overhead.
         // But I want to demonstrate my knowledge of it.
-        // const { createstore } = Redux;
-        // const {Provider, useSelector, useDispatch} = ReactRedux;
+        const { createStore } = Redux;
+        const {Provider, useSelector, useDispatch} = ReactRedux;
+        const {createRoot} = ReactDOM;
 
-        // const filterAction = (skill) => ({type: 'FILTER_BY_SKILL', skill });
-        // const initialState = { jobs: experience, filter: ''};
+        const filterAction = (skill) => ({type: 'FILTER_BY_SKILL', skill });
+        const initialState = { jobs: experience, filter: ''};
 
-        // const rootReducer = (state = initialState, action) => {
-        //     switch (action.type) {
-        //         case 'FILTER_BY_SKILL':
-        //             return {
-        //                 ...state, 
-        //                 jobs: initialState.jobs.filter(job => job.skills.includes(action.skill))
-        //             };
-        //         default:
-        //             return state;
-        //     }
-        // }
+        const rootReducer = (state = initialState, action) => {
+            switch (action.type) {
+                case 'FILTER_BY_SKILL':
+                    return {
+                        ...state, 
+                        jobs: initialState.jobs.filter(job => 
+                            job.skills.some(skill => skill.toLowerCase().includes(action.skill.toLowerCase()))
+                        )
+                    };
+                default:
+                    return state;
+            }
+        }
+
+        const store = createStore(rootReducer);
+
 
         const JobTile = (props) => {
             return (
@@ -359,18 +337,22 @@
             )
         };
 
-        const Populate = ({jobs}) => {
-            const jobblock = jobs.map(job => 
-                <JobTile id={job.id} {...job} />
-            )
+        const Populate = () => {
+            const jobs = useSelector(state => state.jobs);
+            const dispatch = useDispatch();
             return (
                 <>
-                    {jobblock}
+                    <input type="text" className="filter" onChange={(e) => dispatch(filterAction(e.target.value))} placeholder="Filter by skill..." />
+                    {jobs.map(job => <JobTile key={job.id} {...job} />)}
                 </>
             )
         };
 
-        ReactDOM.render(<Populate jobs={experience} />, document.getElementById('experience'));
+        root.render(
+            <Provider store={store}>
+                <Populate />
+            </Provider>
+        );
     </script>
 </body>
 </html>
