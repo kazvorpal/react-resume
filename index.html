@@ -131,7 +131,7 @@
     </style>
 </head>
 <body>
-    <div id="header">The Resume of Kaz</div>
+    <div id="header"></div>
     <div class="parallax-container">
         <div class="parallax-layer background" id="experience">
         </div>
@@ -292,8 +292,11 @@
 
     </script>
     <script type="text/babel">
-        const container = document.getElementById('experience');
-        const root = ReactDOM.createRoot(container);
+        const xp = document.getElementById('experience');
+        const root = ReactDOM.createRoot(xp);
+        const topper = ReactDOM.createRoot(document.getElementById("header"));
+
+
 
         // This page doesn't need Redux. 
         // Its state situation is not complex enough to justify this additional code and overhead.
@@ -333,21 +336,30 @@
                 </div>
             )
         };
-
-        const Populate = () => {
+        const JobList = () => {
             const jobs = useSelector(state => state.jobs);
-            const dispatch = useDispatch();
             return (
                 <>
-                    <input type="text" className="filter" onChange={(e) => dispatch(filterAction(e.target.value))} placeholder="Filter by skill..." />
                     {jobs.map(job => <JobTile key={job.id} {...job} />)}
                 </>
-            )
+            );
         };
 
-        root.render(
-            <Provider store={store}>
-                <Populate />
+        const FilterInput = () => {
+            const dispatch = useDispatch();
+            return(
+                <>
+                <span>The Resume of Kaz</span>
+                <input type="text" className="filter" onChange={(e) => dispatch(filterAction(e.target.value))} placeholder="Filter by skill..." />
+                </>
+            );
+        };
+
+        topper.render(<Provider store={store}>
+                <FilterInput />
+            </Provider>);
+        root.render(<Provider store={store}>
+                <JobList />
             </Provider>
         );
     </script>
