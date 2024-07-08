@@ -33,7 +33,7 @@
         } 
         .filter {
             position: fixed;
-            top: -8px;
+            top: 76px;
             margin: 20px auto;
             display: block;
             padding: 8px 10px;
@@ -81,7 +81,6 @@
             height: 100vh;
             overflow-x: hidden;
             overflow-y: auto;
-            perspective: 1px;
             position: relative;
 
             :is(.cube, .job-tile):hover {
@@ -92,7 +91,6 @@
             }
 
             .background {
-                transform: translateZ(-0.1px) scale(1);
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: space-around;
@@ -123,8 +121,7 @@
             }
 
             .parallax-layer {
-                position: fixed;
-                top: 0;
+                top: 120px;
                 left: 0;
                 right: 0;
                 bottom: 0;
