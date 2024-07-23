@@ -1,2 +1,7 @@
-This is my resume in a single file. 
-I was making a single-page Client-Side-Rendered React resume as a demo, but never finished it...this is a sort of branch I've thrown together to demonstrate my hand-coded CSS for a project. It contains transitions, flex boxes, CSS variables (Which are native, not in LESS or something), et cetera. Also replaced the React with hand-coded JavaScript, using ECMAScript 2023
+This is A VERY SIMPLE demo of my resume in a single, CSR React/Redux file using Babel, all through CDN. 
+
+It is meant as a code sample, showing my use of React and Redux, NOT an example of my web design skills.
+
+In it, I use client-side rendering, so that you can download all of the code and run it as a single file, without having to deal with the server settings.
+
+You can view the running code at https://kazvorpal.github.io/resume-react/
