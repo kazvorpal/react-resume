@@ -12,32 +12,26 @@
     <link rel="stylesheet" href="css/main.css" />
 </head>
 <body>
-    <div id="header"></div>
-    <div class="parallax-container">
-        <div class="parallax-layer background" id="experience">
-        </div>
-    </div>
+    <div id="root"></div>
     <div class="texture" id="tx"></div>
     <script src="js/experience.js"></script>
-    <script>
-
-
-    </script>
+    <script src="js/general.js"></script>
     <script type="text/babel">
-        const xp = document.getElementById('experience');
-        const root = ReactDOM.createRoot(xp);
-        const topper = ReactDOM.createRoot(document.getElementById("header"));
+        const { createStore } = Redux;
+        const {Provider, useSelector, useDispatch } = ReactRedux;
+        const { useState } = React;
+        const {createRoot} = ReactDOM;
+
+        const filterAction = (skill) => ({type: 'FILTER_BY_SKILL', skill});
+        const clearFilterAction = () => ({type: 'CLEAR_FILTER'});
 
         // This page doesn't need Redux. 
         // Its state situation is not complex enough to justify this additional code and overhead.
         // But I want to demonstrate my knowledge of it.
-        const { createStore } = Redux;
-        const {Provider, useSelector, useDispatch} = ReactRedux;
-        const {createRoot} = ReactDOM;
 
-        const filterAction = (skill) => ({type: 'FILTER_BY_SKILL', skill });
         const initialState = { 
-            jobs: experience, filter: '',
+            jobs: experience, 
+            filter: '',
             listing: false
         };
 
@@ -46,13 +40,21 @@
                 case 'FILTER_BY_SKILL':
                     return {
                         ...state, 
+                        filter: action.skill, 
                         jobs: initialState.jobs.filter(job => 
                             job.skills.some(skill => skill.toLowerCase().includes(action.skill.toLowerCase()))
                         )
                     };
+                case 'CLEAR_FILTER':
+                    return {
+                        ...state,
+                        filter: '',
+                        jobs: initialState.jobs
+                    };
                 case 'TOGGLE_SKILLS':
                     return {
                         ...state,
+                        filter: '', 
                         listing: !state.listing
                     }
                 default:
@@ -62,8 +64,7 @@
 
         const store = createStore(rootReducer);
 
-
-         const JobList = () => {
+        const JobList = () => {
             const jobs = useSelector(state => state.jobs);
             return (
                 <>
@@ -79,30 +80,91 @@
                     <p>{props.location}</p>
                     <p>{props.duration}</p>
                     <p>{props.description}</p>
-                    <p><SkillList skills={props.skills} /></p>
+                    <div><SkillList skills={props.skills} /></div>
                 </div>
             )
         };
-       const SkillList = ({skills}) => {
-        const dispatch = useDispatch();
+        const SkillList = ({skills}) => {
+            const dispatch = useDispatch();
             return (
                 <>
-                    {skills.map((skill, index) => (
-                        <div key={index} onClick={(e) => dispatch(filterAction(skill))} className="skill">{skill}</div>
-                    ))}
+                {skills.map((skill, index) => (
+                    <div 
+                    key={index} 
+                    title="Click to filter resume by this skill"
+                    onClick={(e) => dispatch(filterAction(skill))} 
+                    className="skill">{skill}
+                    </div>
+                ))}
                 </>
             )
         }
-
+        
+        const ContactInfo = () => {
+    return (
+        <div className="contact-info">
+            {Array.from(contactinfo).map(([type, details]) => {
+                const display = details.startsWith("https://") ? type : details.split(":")[1];
+                return (
+                    <div key={type} className="contact">
+                        <a href={details}>{display}</a>
+                    </div>
+                );
+            })}
+        </div>
+    );
+};
         const FilterInput = () => {
             const dispatch = useDispatch();
+            const filter = useSelector(state => state.filter);
+            const handleFilterChange = (e) => {
+                dispatch(filterAction(e.target.value));
+            }
+            const handleClearFilter = () => {
+                dispatch(clearFilterAction());
+            }
             return(
                 <>
                 <span>The Resume of Kaz</span>
-                <input type="text" className="filter" onChange={(e) => dispatch(filterAction(e.target.value))} placeholder="Filter by skill..." />
+                <div className="intro">
+                    This is a simple demo of some React and Redux, using an old json list of job history from my resume to build some flex tiles that you can easily filter. It's not a complete set of jobs or skills, I've updated the data a bit but it's missing a lot of details.<br/><br/>
+                    But, once you're suitably impressed with my programming, here's how to contact me:<br/><br/>
+                    <ContactInfo />
+                    </div>
+                    <div>
+                        <input 
+                        type="text" 
+                        className="filter" 
+                        onChange={handleFilterChange} 
+                        value={filter}
+                        placeholder="Filter by skill..." 
+                        />
+                        <button // I'm using visibility: hidden to keep the layout consisent when it's not seen, instead of display: none or creating the element dynamically with a Redux update, which would cause the centered layout to shift around
+                            className={`clearer ${filter ? 'clearer-show' : ''}`} 
+                            onClick={handleClearFilter}
+                            disabled={!filter}
+                        >Clear</button>
+                    </div>
                 </>
             );
         };
+        const App = () => {
+            return (
+                <Provider store={store}>
+                    <div id="header">
+                        <FilterInput />
+                    </div>
+                    <div className="parallax-container">
+                        <div className="parallax-layer background" id="experience">
+                            <JobList />
+                        </div>
+                    </div>
+                </Provider>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
 
         const texture = ((c) => {
             // Like everything in this demo, this background-filling function started out as a quick filler and kept growing more fun to tweak
@@ -118,13 +180,6 @@
             tx.textContent = content;
         })("░▒");
 
-        topper.render(<Provider store={store}>
-                <FilterInput />
-            </Provider>);
-        root.render(<Provider store={store}>
-                <JobList />
-            </Provider>
-        );
     </script>
 </body>
 </html>

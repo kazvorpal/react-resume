@@ -20,10 +20,10 @@
             --box-shadow-standard: 0 0 10px rgba(0, 0, 0, 0.1);
         } 
         .filter {
-            position: fixed;
-            top: 76px;
+            /* position: fixed; */
+            /* top: 76px; */
             margin: 20px auto;
-            display: block;
+            display: inline;
             padding: 8px 10px;
             font-size: 16px;
             border: 1px solid #ccc;
@@ -33,7 +33,13 @@
             box-sizing: border-box;
             z-index: 1000;
         }
-
+        .clearer {
+            margin-left: 16px;
+            visibility: hidden;
+        }
+        .clearer-show {
+            visibility: visible;
+        }
         #header {
             position: fixed;
             top: 0;
@@ -47,6 +53,23 @@
             font-weight: bold;
             box-shadow: var(--box-shadow-standard);
             z-index: 1000;
+        }
+
+        .intro {
+            font-size: 12pt;
+            font-weight: normal;
+            text-align: left;
+            padding: 8px;
+        }
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .contact {
+            margin-right: 10px;
+            padding-left: 8px;
         }
         .texture {
             position: fixed;
@@ -109,15 +132,17 @@
                     .skill {
                         display: inline-block;
                         padding-right: 8px;
+                        color: blue;
                         &:hover {
                             cursor: pointer;
+                            text-decoration: underline;
                         }
                     }
                 }
             }
 
             .parallax-layer {
-                top: 120px;
+                top: 291px;
                 left: 0;
                 right: 0;
                 bottom: 0;
@@ -125,3 +150,37 @@
             }
         }
 
+
+        
+        @media (max-width: 768px) {
+            .contact-info {
+                flex-direction: column;
+            }
+        }        
+        @media (max-width: 768px) {
+            #header {
+                width: 90%;
+                padding: 10px;
+            }
+        
+            .intro {
+                font-size: 10pt;
+            }
+        
+            .filter {
+                width: calc(100% - 70px);  /* Adjust based on the width of your clear button */
+                margin: 10px 0;
+            }
+        
+            .clearer {
+                margin-left: 5px;
+            }
+        
+            .parallax-container .background .job-tile {
+                flex-basis: calc(100% - 20px);
+            }
+        
+            .parallax-container .parallax-layer {
+                top: 320px;  /* Adjust based on your header's actual height on mobile */
+            }
+        }
