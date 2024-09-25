@@ -4,5 +4,5 @@ contactinfo = new Map([
    ["LinkedIn", "https://www.linkedin.com/in/kazmichaelkarl/"],
    ["GitHub (this repo)", "https://github.com/kazvorpal/resume-react"], 
    ["ChatGPT Agent taught to advocate for Kaz via RAG", "https://chatgpt.com/g/g-twnLEOznQ-the-ai-agent-of-kaz"],
-   ["Resume in PDF format", "file:Kaz-resume-ats.pdf"]
+   ["Resume in PDF format", "Kaz-resume-ats.pdf"]
 ])

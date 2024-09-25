@@ -101,19 +101,19 @@
         }
         
         const ContactInfo = () => {
-    return (
-        <div className="contact-info">
-            {Array.from(contactinfo).map(([type, details]) => {
-                const display = details.startsWith("https://") ? type : details.split(":")[1];
-                return (
-                    <div key={type} className="contact">
-                        <a href={details}>{display}</a>
-                    </div>
-                );
-            })}
-        </div>
-    );
-};
+            return (
+                <div className="contact-info">
+                    {Array.from(contactinfo).map(([type, details]) => {
+                        const display = details.startsWith("https://") || details.indexOf(":") == -1 ? type : details.split(":")[1];
+                        return (
+                            <div key={type} className="contact">
+                                <a href={details}>{display}</a>
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        };
         const FilterInput = () => {
             const dispatch = useDispatch();
             const filter = useSelector(state => state.filter);
