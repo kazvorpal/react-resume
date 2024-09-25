@@ -150,25 +150,28 @@
             }
         }
 
-
-        
         @media (max-width: 768px) {
             .contact-info {
                 flex-direction: column;
             }
-        }        
-        @media (max-width: 768px) {
             #header {
                 width: 90%;
                 padding: 10px;
+                position: relative;
             }
         
             .intro {
                 font-size: 10pt;
             }
+            .parallax-layer {
+                position: relative;
+            }
+            .background {
+                position: relative;
+            }
         
             .filter {
-                width: calc(100% - 70px);  /* Adjust based on the width of your clear button */
+                width: calc(100% - 70px);
                 margin: 10px 0;
             }
         
@@ -181,6 +184,6 @@
             }
         
             .parallax-container .parallax-layer {
-                top: 320px;  /* Adjust based on your header's actual height on mobile */
+                top: 320px; 
             }
         }
